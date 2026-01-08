@@ -1,4 +1,4 @@
-768import { Poppins, Inter } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./Components/ClientLayout";
 
