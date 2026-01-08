@@ -337,32 +337,27 @@ const DynamicBlog = () => {
         </div>
       </div>
 
-      {/* Comments Section - Simplified */}
+      {/* Comments Section - Table Layout */}
       <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-12 sm:py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            {/* Section Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5 sm:px-8 sm:py-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+
+          {/* Section 1: Discussion Table */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                 </svg>
-                Discussion
-              </h2>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base">Join the conversation</p>
+                <h2 className="text-xl font-bold text-white">Discussion</h2>
+              </div>
+              <span className="bg-white/20 text-white px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
+                {comments.length} {comments.length === 1 ? 'Comment' : 'Comments'}
+              </span>
             </div>
 
-            {/* Comments List (First) */}
-            <div className="bg-white px-6 py-6 sm:px-8 sm:py-8">
-              <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  {comments.length}
-                </span>
-                {comments.length === 1 ? 'Comment' : 'Comments'}
-              </h3>
-
+            <div className="overflow-x-auto">
               {comments.length === 0 ? (
-                <div className="text-center py-10 border-2 border-dashed border-gray-100 rounded-xl mb-6">
+                <div className="text-center py-12 px-6">
                   <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -372,128 +367,154 @@ const DynamicBlog = () => {
                   <p className="text-gray-400 text-sm mt-1">Be the first to share your thoughts!</p>
                 </div>
               ) : (
-                <div className="space-y-6 mb-8">
-                  {comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((comment) => (
-                    <div
-                      key={comment.id}
-                      className="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-blue-100 transition-colors"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
-                        {(comment.title || "User").charAt(0).toUpperCase()}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                          <h4 className="font-bold text-gray-900">{comment.title}</h4>
-                          <span className="text-xs text-gray-500">
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-gray-50 text-xs uppercase text-gray-500 font-semibold border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-4 w-16 text-center">User</th>
+                      <th className="px-6 py-4">Comment</th>
+                      <th className="px-6 py-4 w-40">Date</th>
+                      <th className="px-6 py-4 w-24 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((comment) => (
+                      <tr key={comment.id} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-6 py-5 align-top text-center w-16">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shadow-sm mx-auto">
+                            {(comment.title || "U").charAt(0).toUpperCase()}
+                          </div>
+                        </td>
+                        <td className="px-6 py-5 align-top">
+                          <h4 className="font-bold text-gray-900 mb-1">{comment.title}</h4>
+                          <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{comment.message || comment.text}</p>
+                        </td>
+                        <td className="px-6 py-5 align-top whitespace-nowrap">
+                          <span className="text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
                             {new Date(comment.createdAt).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
                               year: 'numeric'
                             })}
                           </span>
-                        </div>
-                        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{comment.message || comment.text}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                        </td>
+                        <td className="px-6 py-5 align-top text-center">
+                          <button
+                            onClick={() => {
+                              document.getElementById('reply-form').scrollIntoView({ behavior: 'smooth' });
+                              setCommentTitle(`Re: ${comment.title}`);
+                              const msgInput = document.getElementById('comment-title-input');
+                              if (msgInput) msgInput.focus();
+                            }}
+                            className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center justify-center gap-1 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                            Reply
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               )}
             </div>
+          </div>
 
-            {/* Separator */}
-            <div className="h-px bg-gray-100 w-full"></div>
-
-            {/* Comment Form (Last) */}
-            <div className="bg-gray-50/50 p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+          {/* Section 2: Reply Form */}
+          <div id="reply-form" className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="bg-gray-50/80 px-6 py-4 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
                 Leave a Reply
               </h3>
-              <form onSubmit={handleCommentSubmit}>
-                <div className="space-y-4 sm:space-y-5">
-                  {/* Title Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Title *
-                    </label>
-                    <input
-                      type="text"
-                      value={commentTitle}
-                      onChange={(e) => setCommentTitle(e.target.value)}
-                      placeholder="Give your comment a title..."
-                      maxLength={100}
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 placeholder-gray-400 shadow-sm"
-                      required
-                    />
-                  </div>
+            </div>
 
-                  {/* Message Field */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Message *
-                    </label>
-                    <textarea
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                      placeholder="Write your comment here..."
-                      rows={4}
-                      maxLength={1000}
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none text-gray-800 placeholder-gray-400 shadow-sm"
-                      required
-                    />
-                    <p className="text-xs text-gray-400 mt-1 text-right">{commentText.length}/1000</p>
-                  </div>
+            <form onSubmit={handleCommentSubmit} className="p-6 sm:p-8">
+              <div className="space-y-4 sm:space-y-5">
+                {/* Title Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Title *
+                  </label>
+                  <input
+                    id="comment-title-input"
+                    type="text"
+                    value={commentTitle}
+                    onChange={(e) => setCommentTitle(e.target.value)}
+                    placeholder="Give your comment a title..."
+                    maxLength={100}
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 placeholder-gray-400 shadow-sm"
+                    required
+                  />
                 </div>
 
-                {/* Error/Success Messages */}
-                {commentError && (
-                  <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl flex items-center gap-2 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {commentError}
-                  </div>
-                )}
+                {/* Message Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Write your comment here..."
+                    rows={4}
+                    maxLength={1000}
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none text-gray-800 placeholder-gray-400 shadow-sm"
+                    required
+                  />
+                  <p className="text-xs text-gray-400 mt-1 text-right">{commentText.length}/1000</p>
+                </div>
+              </div>
 
-                {commentSuccess && (
-                  <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Your comment has been posted successfully!
-                  </div>
-                )}
+              {/* Error/Success Messages */}
+              {commentError && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl flex items-center gap-2 text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {commentError}
+                </div>
+              )}
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={submittingComment}
-                  className={`w-full sm:w-auto px-8 mt-6 py-3.5 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2 ${submittingComment
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl'
-                    }`}
-                >
-                  {submittingComment ? (
-                    <>
-                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Posting...
-                    </>
-                  ) : (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                      </svg>
-                      Post Comment
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
+              {commentSuccess && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Your comment has been posted successfully!
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={submittingComment}
+                className={`w-full sm:w-auto px-8 mt-6 py-3.5 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2 ${submittingComment
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl'
+                  }`}
+              >
+                {submittingComment ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Posting...
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Post Comment
+                  </>
+                )}
+              </button>
+            </form>
           </div>
         </div>
       </div>
