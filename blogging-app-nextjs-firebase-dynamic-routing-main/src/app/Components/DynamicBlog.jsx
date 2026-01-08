@@ -347,97 +347,13 @@ const DynamicBlog = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
-                Leave a Comment
+                Discussion
               </h2>
-              <p className="text-blue-100 mt-1 text-sm sm:text-base">Share your thoughts about this article</p>
+              <p className="text-blue-100 mt-1 text-sm sm:text-base">Join the conversation</p>
             </div>
 
-            {/* Simplified Comment Form */}
-            <form onSubmit={handleCommentSubmit} className="p-6 sm:p-8">
-              <div className="space-y-4 sm:space-y-5">
-                {/* Title Field */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    value={commentTitle}
-                    onChange={(e) => setCommentTitle(e.target.value)}
-                    placeholder="Give your comment a title..."
-                    maxLength={100}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 placeholder-gray-400"
-                    required
-                  />
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    placeholder="Write your comment here..."
-                    rows={4}
-                    maxLength={1000}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none text-gray-800 placeholder-gray-400"
-                    required
-                  />
-                  <p className="text-xs text-gray-400 mt-1 text-right">{commentText.length}/1000</p>
-                </div>
-              </div>
-
-              {/* Error/Success Messages */}
-              {commentError && (
-                <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl flex items-center gap-2 text-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {commentError}
-                </div>
-              )}
-
-              {commentSuccess && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 text-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Your comment has been posted successfully!
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={submittingComment}
-                className={`w-full mt-6 py-3.5 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2 ${submittingComment
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl'
-                  }`}
-              >
-                {submittingComment ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Posting...
-                  </>
-                ) : (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                    Post Comment
-                  </>
-                )}
-              </button>
-            </form>
-
-            {/* Comments List */}
-            <div className="border-t border-gray-100 px-6 py-6 sm:px-8 sm:py-8">
+            {/* Comments List (First) */}
+            <div className="bg-white px-6 py-6 sm:px-8 sm:py-8">
               <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
                   {comments.length}
@@ -446,9 +362,9 @@ const DynamicBlog = () => {
               </h3>
 
               {comments.length === 0 ? (
-                <div className="text-center py-10">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="text-center py-10 border-2 border-dashed border-gray-100 rounded-xl mb-6">
+                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
@@ -456,34 +372,127 @@ const DynamicBlog = () => {
                   <p className="text-gray-400 text-sm mt-1">Be the first to share your thoughts!</p>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-6 mb-8">
                   {comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((comment) => (
                     <div
                       key={comment.id}
-                      className="p-4 sm:p-5 bg-gradient-to-r from-gray-50 to-blue-50/50 rounded-xl border border-gray-100"
+                      className="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-blue-100 transition-colors"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                          {(comment.title || "C").charAt(0).toUpperCase()}
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
+                        {(comment.title || "User").charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+                          <h4 className="font-bold text-gray-900">{comment.title}</h4>
+                          <span className="text-xs text-gray-500">
+                            {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </span>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 flex-wrap mb-2">
-                            <h4 className="font-semibold text-gray-800">{comment.title}</h4>
-                            <span className="text-xs text-gray-400">
-                              {new Date(comment.createdAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                              })}
-                            </span>
-                          </div>
-                          <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{comment.message || comment.text}</p>
-                        </div>
+                        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{comment.message || comment.text}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Separator */}
+            <div className="h-px bg-gray-100 w-full"></div>
+
+            {/* Comment Form (Last) */}
+            <div className="bg-gray-50/50 p-6 sm:p-8">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                Leave a Reply
+              </h3>
+              <form onSubmit={handleCommentSubmit}>
+                <div className="space-y-4 sm:space-y-5">
+                  {/* Title Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={commentTitle}
+                      onChange={(e) => setCommentTitle(e.target.value)}
+                      placeholder="Give your comment a title..."
+                      maxLength={100}
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800 placeholder-gray-400 shadow-sm"
+                      required
+                    />
+                  </div>
+
+                  {/* Message Field */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Write your comment here..."
+                      rows={4}
+                      maxLength={1000}
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none text-gray-800 placeholder-gray-400 shadow-sm"
+                      required
+                    />
+                    <p className="text-xs text-gray-400 mt-1 text-right">{commentText.length}/1000</p>
+                  </div>
+                </div>
+
+                {/* Error/Success Messages */}
+                {commentError && (
+                  <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl flex items-center gap-2 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {commentError}
+                  </div>
+                )}
+
+                {commentSuccess && (
+                  <div className="mt-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-xl flex items-center gap-2 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Your comment has been posted successfully!
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={submittingComment}
+                  className={`w-full sm:w-auto px-8 mt-6 py-3.5 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2 ${submittingComment
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl'
+                    }`}
+                >
+                  {submittingComment ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Posting...
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      Post Comment
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
           </div>
         </div>
