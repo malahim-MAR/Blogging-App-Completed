@@ -38,8 +38,8 @@ const Page = () => {
         return () => unsubscribe();
     }, []);
 
-    // Filter blogs with "Travel" tag
-    const filterTravelBlogs = () => {
+    // Filter blogs with "Sports" tag
+    const filterSportsBlogs = () => {
         return blogData.filter(blog => {
             if (!blog.BlogTags) return false;
 
@@ -57,13 +57,13 @@ const Page = () => {
         });
     };
 
-    const travelBlogs = filterTravelBlogs();
+    const sportsBlogs = filterSportsBlogs();
 
     return (
         <div>
             <Navbar />
             <BlogCard
-                blogs={travelBlogs}
+                blogs={sportsBlogs}
                 loading={loading}
                 error={error}
             />

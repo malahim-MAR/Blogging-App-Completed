@@ -15,8 +15,17 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase (Only if API Key is present to avoid build crashes)
+let app;
+try {
+  if (firebaseConfig.apiKey) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    console.warn("Firebase configuration is missing. This may cause errors during runtime.");
+  }
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
+}
 
 // Initialize Analytics (browser only)
 let analytics;
@@ -28,6 +37,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Safe exports
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
 export { analytics };
