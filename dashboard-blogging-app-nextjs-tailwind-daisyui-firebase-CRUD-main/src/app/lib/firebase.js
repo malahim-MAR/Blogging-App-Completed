@@ -26,13 +26,25 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Initialize Firebase safely to prevent build crashes
+let app;
+try {
+  if (firebaseConfig.apiKey) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    console.warn("Firebase configuration is missing. This may cause errors during runtime.");
+  }
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
+}
+
+// Safe exports (will be null if config is missing)
+export const auth = app ? getAuth(app) : null;
+export const db = app ? getFirestore(app) : null;
 
 // 🔢 Get total blog count from Firestore
 export const getTotalBlogs = async () => {
+  if (!db) return 0;
   try {
     const blogsRef = collection(db, "MyBlogs");
     const snapshot = await getCountFromServer(blogsRef);
@@ -45,6 +57,7 @@ export const getTotalBlogs = async () => {
 
 // 🕒 Get most recent blogs with limit
 export const getRecentBlogs = async (limit = 4) => {
+  if (!db) return [];
   try {
     const blogsRef = collection(db, "MyBlogs");
     const q = query(blogsRef, orderBy("createdAt", "desc"), limitQuery(limit));
@@ -68,7 +81,7 @@ export const getRecentBlogs = async (limit = 4) => {
 
 // 👀 Count a unique visit (per session)
 export const countVisit = async () => {
-  if (typeof window === "undefined") return; // Avoid on server
+  if (typeof window === "undefined" || !db) return; // Avoid on server or if db missing
 
   if (!sessionStorage.getItem("visitCounted")) {
     const docRef = doc(db, "metrics", "visits");
@@ -90,6 +103,7 @@ export const countVisit = async () => {
 
 // 🔄 Get the total visit count
 export const getVisitCount = async () => {
+  if (!db) return 0;
   try {
     const docSnap = await getDoc(doc(db, "metrics", "visits"));
     return docSnap.exists() ? docSnap.data().count : 0;
